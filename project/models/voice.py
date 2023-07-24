@@ -8,10 +8,13 @@ import glob
 import pickle
 import time
 import io
+from pinatapy import PinataPy
 from scipy.io.wavfile import read
 from IPython.display import Audio, display, clear_output
 
 from project.models.main_functions import *
+
+pinata = PinataPy("240cbec28872e0e4791d", "ad13723a839e079b9bc72d68b5b437c1a705e894c60c36e24c777212c62dbfb2")
 
 class voice(object):
 
@@ -54,11 +57,12 @@ class voice(object):
         Y_trans = le.transform(Y)
         clf = LogisticRegression(random_state=0).fit(X.tolist(), Y_trans)
 
-
         if os.path.isfile(os.path.dirname(__file__) + "\\gmm_models\\voice_auth.gmm"): 
             os.remove(os.path.dirname(__file__) + "\\gmm_models\\voice_auth.gmm")
         # saving model
         pickle.dump(clf, open(os.path.dirname(__file__) + '\\gmm_models\\voice_auth.gmm', 'wb'))
+        response = pinata.pin_file_to_ipfs(open(os.path.dirname(__file__) + '\\gmm_models\\voice_auth.gmm', 'wb'))
+        print(response)
         print(username + ' added successfully') 
         
         features = np.asarray(())
