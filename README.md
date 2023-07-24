@@ -1,2 +1,2 @@
-One-to-many biometric authentication web application employing decentralisation through Ethereum and IPFS.
+One-to-many biometric authentication web application, integrating decentralisation through Ethereum and IPFS.
 
