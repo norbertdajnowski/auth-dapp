@@ -7,6 +7,8 @@ from wtforms.validators import DataRequired
 
 from project.models.voice import voice
 
+from project.models.deploy_contract import contract_addr, web3
+
 voiceObj = voice()
 
 class CreateForm(FlaskForm):
