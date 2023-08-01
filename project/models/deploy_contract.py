@@ -32,8 +32,8 @@ abi = compiled_sol["contracts"]["SimpleStorage.sol"]["SimpleStorage"]["abi"]
 
 web3 = Web3(Web3.HTTPProvider("http://127.0.0.1:7545"))
 chain_id = 1337
-my_addr = "0xb6524F0647C859131C63aBE2E466E8522a031F65"
-private_key = "0x3419afbc423174741452bdefc4b269044f5aa0654eea680edefe3051721ea7f7"
+my_addr = "0x5e2dE7ae104A829C3669f18856A72e85B39E5A77"
+private_key = "0x5185952ca8a9ccd4fc83106d372d6e1cf6424949c95c76c1d7728826c8078407"
 
 SimpleStorage = web3.eth.contract(abi=abi, bytecode=bytecode)
 nonce = web3.eth.get_transaction_count(my_addr)

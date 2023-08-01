@@ -5,6 +5,7 @@ import wave
 import cv2
 import os
 import glob
+from cryptography.fernet import Fernet
 import pickle
 import time
 import io
@@ -28,6 +29,9 @@ class voice(object):
         self.FILENAME = "./test.wav"
         self.MODEL = "\\gmm_models\\voice_auth.gmm"
         self.VOICEPATH = "\\voice_database\\"
+        self.IPFS_HASH = ""
+        self.IPFS_PRIVATE_KEY = Fernet.generate_key()
+        self.fernet = Fernet(self.IPFS_PRIVATE_KEY)
 
         self.VOICEDICT = {}
 
@@ -59,11 +63,25 @@ class voice(object):
 
         if os.path.isfile(os.path.dirname(__file__) + "\\gmm_models\\voice_auth.gmm"): 
             os.remove(os.path.dirname(__file__) + "\\gmm_models\\voice_auth.gmm")
+            if self.IPFS_HASH != "":
+                response = pinata.remove_pin_from_ipfs(self.IPFS_HASH)   
+                print(response)  
         # saving model
         pickle.dump(clf, open(os.path.dirname(__file__) + '\\gmm_models\\voice_auth.gmm', 'wb'))
-        response = pinata.pin_file_to_ipfs(open(os.path.dirname(__file__) + '\\gmm_models\\voice_auth.gmm', 'wb'))
-        print(response)
-        print(username + ' added successfully') 
+        try:
+            with open(os.path.dirname(__file__) + "\\gmm_models\\voice_auth.gmm", "rb") as voice_dict:
+                safe_voice_dict = open(os.path.dirname(__file__) + "\\gmm_models\\encrypted_voice_auth.gmm", "w")
+                encrypted_voice = self.fernet.encrypt(voice_dict.read())
+                safe_voice_dict.write(str(encrypted_voice))
+                safe_voice_dict.close()
+        except Exception as e:
+            print("Error during encryption:", e)
+        if os.path.isfile(os.path.dirname(__file__) + "\\gmm_models\\encrypted_voice_auth.gmm"):
+            response = pinata.pin_file_to_ipfs(os.path.dirname(__file__) + '\\gmm_models\\encrypted_voice_auth.gmm')   
+            self.IPFS_HASH = response['IpfsHash']
+            print(self.IPFS_HASH)
+
+            print(username + ' added successfully') 
         
         features = np.asarray(())
 
