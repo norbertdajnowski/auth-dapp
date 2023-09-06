@@ -2,28 +2,27 @@
 
 pragma solidity >=0.6.0 <0.9.0;
 
-contract SimpleStorage {
-    uint256 favoriteNumber;
+contract authorisationContract {
 
-    // This is a comment!
-    struct People {
-        uint256 favoriteNumber;
-        string name;
+    address owner;
+
+    struct client{
+        string wallet;
+        bool exists;
+    }
+    
+    mapping(string => client) public clientMap;
+
+    function add(string memory _walletAddress) public {
+        require(msg.sender == owner, "You do not have the right privileges to do this");
+        clientMap[_walletAddress] = client(_walletAddress,true);
     }
 
-    People[] public people;
-    mapping(string => uint256) public nameToFavoriteNumber;
-
-    function store(uint256 _favoriteNumber) public {
-        favoriteNumber = _favoriteNumber;
-    }
-
-    function retrieve() public view returns (uint256) {
-        return favoriteNumber;
-    }
-
-    function addPerson(string memory _name, uint256 _favoriteNumber) public {
-        people.push(People(_favoriteNumber, _name));
-        nameToFavoriteNumber[_name] = _favoriteNumber;
+    function check(string memory _walletAddress) public view returns (bool) {
+        if(clientMap[_walletAddress].exists){
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -9,9 +9,11 @@ from cryptography.fernet import Fernet
 import pickle
 import time
 import io
+import requests
 from pinatapy import PinataPy
 from scipy.io.wavfile import read
 from IPython.display import Audio, display, clear_output
+from retry import retry
 
 from project.models.main_functions import *
 
@@ -29,7 +31,10 @@ class voice(object):
         self.FILENAME = "./test.wav"
         self.MODEL = "\\gmm_models\\voice_auth.gmm"
         self.VOICEPATH = "\\voice_database\\"
+        #Regularly updated GMM libraries IPFS CID
         self.IPFS_HASH = ""
+
+        #Encryption keys for the GMM library
         self.IPFS_PRIVATE_KEY = Fernet.generate_key()
         self.fernet = Fernet(self.IPFS_PRIVATE_KEY)
 
@@ -69,13 +74,15 @@ class voice(object):
         # saving model
         pickle.dump(clf, open(os.path.dirname(__file__) + '\\gmm_models\\voice_auth.gmm', 'wb'))
         try:
+            #Encrypt Biometric Database
             with open(os.path.dirname(__file__) + "\\gmm_models\\voice_auth.gmm", "rb") as voice_dict:
                 safe_voice_dict = open(os.path.dirname(__file__) + "\\gmm_models\\encrypted_voice_auth.gmm", "w")
                 encrypted_voice = self.fernet.encrypt(voice_dict.read())
-                safe_voice_dict.write(str(encrypted_voice))
+                safe_voice_dict.write(str(encrypted_voice, 'utf-8'))
                 safe_voice_dict.close()
         except Exception as e:
             print("Error during encryption:", e)
+        #Write Biometric Database to IPFS
         if os.path.isfile(os.path.dirname(__file__) + "\\gmm_models\\encrypted_voice_auth.gmm"):
             response = pinata.pin_file_to_ipfs(os.path.dirname(__file__) + '\\gmm_models\\encrypted_voice_auth.gmm')   
             self.IPFS_HASH = response['IpfsHash']
@@ -89,6 +96,13 @@ class voice(object):
         # Voice Authentication
         VOICENAMES = [ name for name in os.listdir(os.path.dirname(__file__) + self.VOICEPATH) if os.path.isdir(os.path.join(os.path.dirname(__file__) + self.VOICEPATH, name)) ]
         print(VOICENAMES)
+
+        #IPFS Read Biometric Database
+        enc_voice_dict = requests.get("https://ipfs.io/ipfs/" + self.IPFS_HASH).text
+        print(enc_voice_dict)
+        voice_dict = self.fernet.decrypt(bytes(enc_voice_dict, encoding='utf8'))
+        with open(os.path.dirname(__file__) + "\\gmm_models\\voice_auth.gmm", 'wb') as file:
+            file.write(str(voice_dict))
 
         if username in VOICENAMES:
             userIndex = VOICENAMES.index(username)
