@@ -42,6 +42,7 @@ class voice(object):
 
     def add_user(self, voice1, voice2, voice3, username):   
 
+        result = False
         source = self.VOICEPATH + username
         absolute_path = os.path.dirname(__file__) + self.VOICEPATH + username
         os.mkdir(absolute_path)
@@ -89,8 +90,10 @@ class voice(object):
             print(self.IPFS_HASH)
 
             print(username + ' added successfully') 
+            result = True
         
         features = np.asarray(())
+        return result
 
     def recognise(self, voice, username):
         # Voice Authentication

@@ -42,7 +42,8 @@ def addVoice():
     voice3 = request.files['voice3'].read()
     username = request.files['username'].read().decode("utf-8") 
 
-    voiceObj.add_user(voice1, voice2, voice3, username)
+    if (voiceObj.add_user(voice1, voice2, voice3, username) == True):
+        hash(contract_addr)
 
     return render_template('printer/index.html')
 

@@ -4,7 +4,7 @@ import json
 import os
 
 
-with open("./project/contracts/SimpleStorage.sol", "r") as file:
+with open("./project/contracts/authorisationContract.sol", "r") as file:
     simple_storage_file = file.read()
 
 solcx.install_solc('0.6.0')
@@ -26,9 +26,9 @@ compiled_sol = solcx.compile_standard(
 with open("compiled_code.json", "w") as file:
     json.dump(compiled_sol, file)
 
-bytecode = compiled_sol["contracts"]["SimpleStorage.sol"]["SimpleStorage"]["evm"]["bytecode"]["object"]
+bytecode = compiled_sol["contracts"]["authorisationContract.sol"]["authorisationContract"]["evm"]["bytecode"]["object"]
 
-abi = compiled_sol["contracts"]["SimpleStorage.sol"]["SimpleStorage"]["abi"]
+abi = compiled_sol["contracts"]["authorisationContract.sol"]["authorisationContract"]["abi"]
 
 web3 = Web3(Web3.HTTPProvider("http://127.0.0.1:7545"))
 chain_id = 1337
