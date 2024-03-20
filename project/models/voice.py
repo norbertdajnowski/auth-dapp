@@ -101,11 +101,11 @@ class voice(object):
         print(VOICENAMES)
 
         #IPFS Read Biometric Database
-        enc_voice_dict = requests.get("https://ipfs.io/ipfs/" + self.IPFS_HASH).text
-        print(enc_voice_dict)
-        voice_dict = self.fernet.decrypt(bytes(enc_voice_dict, encoding='utf8'))
-        with open(os.path.dirname(__file__) + "\\gmm_models\\voice_auth.gmm", 'wb') as file:
-            file.write(str(voice_dict))
+       # enc_voice_dict = requests.get("https://ipfs.io/ipfs/" + self.IPFS_HASH).text
+        #print(enc_voice_dict)
+        #voice_dict = self.fernet.decrypt(bytes(enc_voice_dict, encoding='utf8'))
+       # with open(os.path.dirname(__file__) + "\\gmm_models\\voice_auth.gmm", 'wb') as file:
+           # file.write(voice_dict)
 
         if username in VOICENAMES:
             userIndex = VOICENAMES.index(username)

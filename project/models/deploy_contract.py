@@ -26,14 +26,14 @@ compiled_sol = solcx.compile_standard(
 with open("compiled_code.json", "w") as file:
     json.dump(compiled_sol, file)
 
-bytecode = compiled_sol["contracts"]["authorisationContract.sol"]["authorisationContract"]["evm"]["bytecode"]["object"]
+bytecode = compiled_sol["contracts"]["SimpleStorage.sol"]["authorisationContract"]["evm"]["bytecode"]["object"]
 
-abi = compiled_sol["contracts"]["authorisationContract.sol"]["authorisationContract"]["abi"]
+abi = compiled_sol["contracts"]["SimpleStorage.sol"]["authorisationContract"]["abi"]
 
 web3 = Web3(Web3.HTTPProvider("http://127.0.0.1:7545"))
 chain_id = 1337
-my_addr = "0x2BF099F6429780635B173Bbd432dc555e0E45707"
-private_key = "0xd2c99a4ec5bb02cef0d0e3092e49e228ba1f67c16893fcc0a8e3a972ed3e1197"
+my_addr = "0xc7f9b521e620230E5190cd0a67825917BE53dB7a"
+private_key = "0xad235a1dda074876fa90221bc78759eb5fdc6adbdefccddb50e94b0eef7dbcc1"
 
 SimpleStorage = web3.eth.contract(abi=abi, bytecode=bytecode)
 nonce = web3.eth.get_transaction_count(my_addr)
