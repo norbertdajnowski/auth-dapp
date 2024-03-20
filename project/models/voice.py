@@ -98,15 +98,15 @@ class voice(object):
     def recognise(self, voice, username):
         # Voice Authentication
         VOICENAMES = [ name for name in os.listdir(os.path.dirname(__file__) + self.VOICEPATH) if os.path.isdir(os.path.join(os.path.dirname(__file__) + self.VOICEPATH, name)) ]
-        print(VOICENAMES)
 
         #IPFS Read Biometric Database
-       # enc_voice_dict = requests.get("https://ipfs.io/ipfs/" + self.IPFS_HASH).text
-        #print(enc_voice_dict)
-        #voice_dict = self.fernet.decrypt(bytes(enc_voice_dict, encoding='utf8'))
-       # with open(os.path.dirname(__file__) + "\\gmm_models\\voice_auth.gmm", 'wb') as file:
-           # file.write(voice_dict)
+        enc_voice_dict = requests.get("https://ipfs.io/ipfs/" + self.IPFS_HASH).text
+        voice_dict = self.fernet.decrypt(bytes(enc_voice_dict, encoding='utf-8'))
+        with open(os.path.dirname(__file__) + "\\gmm_models\\voice_auth.gmm", 'wb') as file:
+            file.write(voice_dict)
+            print(voice_dict)
 
+        print(VOICENAMES)
         if username in VOICENAMES:
             userIndex = VOICENAMES.index(username)
             arr = [VOICENAMES[userIndex]]
