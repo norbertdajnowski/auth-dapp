@@ -26,7 +26,7 @@ contract authorisationContract {
         }
     }
 
-    function del(string memory _walletAddress) public {
+    function remove(string memory _walletAddress) public {
         //require(msg.sender == owner, "You do not have the right privileges to do this");
         clientMap[_walletAddress] = client(_walletAddress,true);
     }
