@@ -10,6 +10,7 @@ import pickle
 import time
 import io
 import requests
+
 from pinatapy import PinataPy
 from scipy.io.wavfile import read
 from IPython.display import Audio, display, clear_output

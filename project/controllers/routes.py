@@ -4,10 +4,14 @@ from flask import render_template, request
 from flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms.validators import DataRequired
+from cryptography.fernet import Fernet
 
 from project.models.voice import voice
 
-from project.models.deploy_contract import contract_addr, web3
+from project.models.deploy_contract import web3Connect
+
+web3Interface = web3Connect()
+contract, contractAdrress, abi = web3Interface.deployContract()
 
 voiceObj = voice()
 
@@ -43,7 +47,7 @@ def addVoice():
     username = request.files['username'].read().decode("utf-8") 
 
     if (voiceObj.add_user(voice1, voice2, voice3, username) == True):
-        hash(contract_addr)
+        contract.functions.add(hash(web3Interface.clientAddress)).call()
 
     return render_template('printer/index.html')
 
