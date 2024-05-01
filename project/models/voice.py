@@ -105,9 +105,8 @@ class voice(object):
         voice_dict = self.fernet.decrypt(bytes(enc_voice_dict, encoding='utf-8'))
         with open(os.path.dirname(__file__) + "\\gmm_models\\voice_auth.gmm", 'wb') as file:
             file.write(voice_dict)
-            print(voice_dict)
 
-        print(VOICENAMES)
+
         if username in VOICENAMES:
             userIndex = VOICENAMES.index(username)
             arr = [VOICENAMES[userIndex]]
